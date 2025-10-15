@@ -1,5 +1,5 @@
 import BreadcrumbHeader from "@/components/shared/Header/BreadcrumbHeader";
-import { Player } from "@/features/video-player";
+import { Player } from "@/features/course/video-player";
 
 export default function Home() {
   return (
