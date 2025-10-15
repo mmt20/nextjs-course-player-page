@@ -1,1 +1,129 @@
+export function formatTime(time: number): string {
+  const minutes = Math.floor(time / 60);
+  const seconds = Math.floor(time % 60);
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
+import { CourseData } from "./types";
 
+// Mock course data
+export const mockCourseData: CourseData = {
+  id: "seo-course",
+  title: "Starting SEO as your Home",
+  videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+  duration: "3 weeks",
+  topics: 36,
+  lessons: 8,
+  price: 80,
+  enrolled: 65,
+  instructor: "Alex Snow",
+  language: "English",
+  certificate: true,
+  progress: 63,
+  weeks: [
+    {
+      id: "week-1-4",
+      title: "Week 1-4",
+      description: "Advanced story telling techniques for writers: Personas, Characters & Plots",
+      lessons: [
+        { id: "intro", title: "Introduction", type: "video", duration: "8 MINUTES", locked: false, completed: true },
+        {
+          id: "overview",
+          title: "Course Overview",
+          type: "video",
+          duration: "12 MINUTES",
+          locked: false,
+          completed: true,
+        },
+        {
+          id: "exercise-1",
+          title: "Course Exercise / Reference Files",
+          type: "pdf",
+          questions: 2,
+          duration: "10 MINUTES",
+          locked: false,
+          completed: false,
+        },
+        {
+          id: "foundation-1",
+          title: "Code Lesson Foundation / Optional",
+          type: "video",
+          duration: "15 MINUTES",
+          locked: false,
+          completed: false,
+        },
+        {
+          id: "html-intro",
+          title: "Introducing HTML",
+          type: "video",
+          duration: "18 MINUTES",
+          locked: false,
+          completed: false,
+        },
+      ],
+    },
+    {
+      id: "week-5-8",
+      title: "Week 5-8",
+      description: "Advanced story telling techniques for writers: Personas, Characters & Plots",
+      lessons: [
+        { id: "defining", title: "Defining Functions", type: "video", locked: true, completed: false },
+        { id: "parameters", title: "Function Parameters", type: "video", locked: true, completed: false },
+        {
+          id: "return",
+          title: "Return Values From Functions",
+          type: "exam",
+          questions: 0,
+          duration: "10 MINUTES",
+          locked: false,
+          completed: false,
+          examId: "exam-1",
+        },
+        { id: "variables", title: "Global Variable and Scope", type: "video", locked: true, completed: false },
+        {
+          id: "creating",
+          title: "Newer Way of creating a Constant (Optional if you have one)",
+          type: "video",
+          locked: true,
+          completed: false,
+        },
+        { id: "constants", title: "Constants", type: "video", locked: true, completed: false },
+      ],
+    },
+    {
+      id: "week-5-b",
+      title: "Week 5-B",
+      description: "Advanced story telling techniques for writers: Personas, Characters & Plots",
+      lessons: [
+        { id: "defining-b", title: "Defining Functions", type: "video", locked: true, completed: false },
+        { id: "operators-b", title: "Function Operators", type: "video", locked: true, completed: false },
+        { id: "return-b", title: "Return Values from Functions", type: "video", locked: true, completed: false },
+        { id: "variables-b", title: "Global Variables and Scope", type: "video", locked: true, completed: false },
+        { id: "creating-b", title: "Name Way of Creating a Function", type: "video", locked: true, completed: false },
+        { id: "constants-b", title: "Constants", type: "video", locked: true, completed: false },
+      ],
+    },
+  ],
+  comments: [
+    {
+      id: "1",
+      name: "Student Name Goes Here",
+      date: "Oct 10, 2021",
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quidem facilis tempore reiciendis laboriosam voluptatum dicta expedita aliquam nesciunt vitae eiust",
+      avatar: "/placeholder.svg?height=48&width=48",
+    },
+    {
+      id: "2",
+      name: "Student Name Goes Here",
+      date: "Oct 15, 2021",
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quidem facilis tempore reiciendis laboriosam voluptatum dicta expedita aliquam nesciunt vitae eiust",
+      avatar: "/placeholder.svg?height=48&width=48",
+    },
+    {
+      id: "3",
+      name: "Student Name Goes Here",
+      date: "Oct 19, 2021",
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quidem facilis tempore reiciendis laboriosam voluptatum dicta expedita aliquam nesciunt vitae eiust",
+      avatar: "/placeholder.svg?height=48&width=48",
+    },
+  ],
+};
