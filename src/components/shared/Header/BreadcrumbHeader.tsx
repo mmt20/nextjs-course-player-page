@@ -25,16 +25,16 @@ const BreadcrumbHeader = ({ breadcrumbs, title }: BreadcrumbHeaderProps) => {
       <Breadcrumb>
         <BreadcrumbList>
           {breadcrumbs?.map((crumb, index) => (
-            <BreadcrumbItem>
-              <React.Fragment key={index}>
+            <React.Fragment key={index}>
+              <BreadcrumbItem>
                 {crumb.href ? (
                   <BreadcrumbLink href={crumb.href}>{crumb.label}</BreadcrumbLink>
                 ) : (
                   <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
                 )}
                 {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
-              </React.Fragment>
-            </BreadcrumbItem>
+              </BreadcrumbItem>
+            </React.Fragment>
           ))}
         </BreadcrumbList>
       </Breadcrumb>
