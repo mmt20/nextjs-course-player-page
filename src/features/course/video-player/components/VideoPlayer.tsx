@@ -7,7 +7,7 @@ import { VideoPlayerProps } from "../types";
 import useVideoPlayer from "../hooks";
 import { formatTime } from "../utils";
 
-const VideoPlayer = ({ videoUrl, onWideMode }: VideoPlayerProps) => {
+const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProps) => {
   const {
     videoRef,
     containerRef,
@@ -21,87 +21,126 @@ const VideoPlayer = ({ videoUrl, onWideMode }: VideoPlayerProps) => {
     handleSeek,
     handleVolumeChange,
     toggleMute,
-    toggleFullscreen,
     enterPictureInPicture,
-  } = useVideoPlayer(videoUrl);
+  } = useVideoPlayer(videoUrl, externalVideoRef);
+
+  // Enhanced fullscreen handler that forces fullscreen even without auto-rotate
+  const handleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      const container = containerRef.current;
+      if (container) {
+        // Try different fullscreen methods for cross-browser compatibility
+        if (container.requestFullscreen) {
+          container.requestFullscreen();
+        } else if ((container as any).mozRequestFullScreen) {
+          (container as any).mozRequestFullScreen();
+        } else if ((container as any).webkitRequestFullscreen) {
+          (container as any).webkitRequestFullscreen();
+        } else if ((container as any).msRequestFullscreen) {
+          (container as any).msRequestFullscreen();
+        }
+
+        // For mobile devices, try to force landscape orientation
+        if (screen && (screen as any).orientation && (screen as any).orientation.lock) {
+          try {
+            (screen as any).orientation.lock("landscape").catch(() => {
+              // Ignore errors if orientation lock is not supported
+            });
+          } catch (e) {
+            // Ignore errors
+          }
+        }
+      }
+    } else {
+      document.exitFullscreen();
+    }
+  };
 
   return (
-    <div ref={containerRef} className="relative bg-black  overflow-hidden ">
-      <video ref={videoRef} src={videoUrl} className="w-full aspect-video" onClick={togglePlay} />
+    <div ref={containerRef} className="relative bg-black overflow-hidden group w-full h-full">
+      <video ref={videoRef} src={videoUrl} className="w-full h-full object-contain" onClick={togglePlay} />
 
-      {/* Custom Controls */}
-      <div
-        className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 transition-opacity
-        opacity-0 group-hover:opacity-100
-        sm:opacity-100 sm:group-hover:opacity-100
-        "
-      >
-        {/* Progress Bar */}
-        <Slider value={[currentTime]} max={duration || 100} step={0.1} onValueChange={handleSeek} className="mb-4 " />
+      {/* Progress Bar - Always on top like YouTube */}
+      <div className="absolute bottom-12 sm:bottom-16 left-0 right-0 px-3 sm:px-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
+        <Slider value={[currentTime]} max={duration || 100} step={0.1} onValueChange={handleSeek} className="w-full" />
+      </div>
 
-        <div className="flex items-center justify-between gap-4">
+      {/* Custom Controls - YouTube Style */}
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent px-3 sm:px-4 py-2 sm:py-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
+        <div className="flex items-center justify-between gap-2 sm:gap-4">
           {/* Left Controls */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1 sm:gap-2">
             <Button
               size="icon"
               variant="ghost"
               onClick={togglePlay}
-              className="text-white hover:bg-white/20 cursor-pointer"
+              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10"
             >
-              {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+              {isPlaying ? <Pause className="h-4 w-4 sm:h-5 sm:w-5" /> : <Play className="h-4 w-4 sm:h-5 sm:w-5" />}
             </Button>
 
-            <div className="flex items-center gap-2">
+            {/* Volume Control with YouTube-style hover behavior */}
+            <div className="flex items-center group/volume">
               <Button
                 size="icon"
                 variant="ghost"
                 onClick={toggleMute}
-                className="text-white hover:bg-white/20 cursor-pointer"
+                className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10"
               >
-                {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+                {isMuted ? (
+                  <VolumeX className="h-4 w-4 sm:h-5 sm:w-5" />
+                ) : (
+                  <Volume2 className="h-4 w-4 sm:h-5 sm:w-5" />
+                )}
               </Button>
-              <Slider
-                value={[isMuted ? 0 : volume]}
-                max={1}
-                step={0.01}
-                onValueChange={handleVolumeChange}
-                className="w-20"
-              />
+              <div className="w-0 sm:w-16 md:w-0 md:group-hover/volume:w-20 overflow-hidden transition-all duration-200">
+                <Slider
+                  value={[isMuted ? 0 : volume]}
+                  max={1}
+                  step={0.01}
+                  onValueChange={handleVolumeChange}
+                  className="ml-2 "
+                />
+              </div>
             </div>
 
-            <span className="text-white text-sm">
+            <span className="text-white text-xs sm:text-sm font-mono">
               {formatTime(currentTime)} / {formatTime(duration)}
             </span>
           </div>
 
           {/* Right Controls */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <Button
               size="icon"
               variant="ghost"
               onClick={onWideMode}
-              className="text-white hover:bg-white/20 cursor-pointer"
+              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10"
               title="Wide Mode"
             >
-              <Maximize2 className="h-5 w-5" />
+              <Maximize2 className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
             <Button
               size="icon"
               variant="ghost"
               onClick={enterPictureInPicture}
-              className="text-white hover:bg-white/20 cursor-pointer"
-              title="Picture-in-Picture"
+              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10 pip-button-mobile"
+              title="Picture-in-Picture (Auto-activates when scrolling on mobile)"
             >
-              <PictureInPicture2 className="h-5 w-5" />
+              <PictureInPicture2 className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
             <Button
               size="icon"
               variant="ghost"
-              onClick={toggleFullscreen}
-              className="text-white hover:bg-white/20 cursor-pointer"
+              onClick={handleFullscreen}
+              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10"
               title="Fullscreen"
             >
-              {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
+              {isFullscreen ? (
+                <Minimize className="h-4 w-4 sm:h-5 sm:w-5" />
+              ) : (
+                <Maximize className="h-4 w-4 sm:h-5 sm:w-5" />
+              )}
             </Button>
           </div>
         </div>

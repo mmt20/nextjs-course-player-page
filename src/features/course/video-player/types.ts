@@ -1,5 +1,6 @@
 export interface VideoPlayerProps {
   videoUrl: string;
+  externalVideoRef?: React.RefObject<HTMLVideoElement>;
   onWideMode?: () => void;
 }
 type LessonType = "video" | "pdf" | "exam";

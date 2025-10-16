@@ -120,3 +120,33 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  /* PIP placeholder styles */
+  .pip-placeholder {
+    backdrop-filter: blur(8px);
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3));
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+  }
+
+  /* Fullscreen video styles */
+  .video-player-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+  }
+
+  /* PIP button highlight on mobile */
+  @media (max-width: 1023px) {
+    .pip-button-mobile {
+      background-color: rgba(59, 130, 246, 0.2) !important;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    .pip-button-mobile:hover {
+      background-color: rgba(59, 130, 246, 0.3) !important;
+    }
+  }
+}
