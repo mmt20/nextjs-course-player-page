@@ -62,7 +62,14 @@ const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProp
 
       {/* Progress Bar - Always on top like YouTube */}
       <div className="absolute bottom-12 sm:bottom-16 left-0 right-0 px-3 sm:px-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
-        <Slider value={[currentTime]} max={duration || 100} step={0.1} onValueChange={handleSeek} className="w-full" />
+        <Slider
+          variant="video"
+          value={[currentTime]}
+          max={duration || 100}
+          step={0.1}
+          onValueChange={handleSeek}
+          className="w-full"
+        />
       </div>
 
       {/* Custom Controls - YouTube Style */}
@@ -74,7 +81,7 @@ const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProp
               size="icon"
               variant="ghost"
               onClick={togglePlay}
-              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10"
+              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10 cursor-pointer"
             >
               {isPlaying ? <Pause className="h-4 w-4 sm:h-5 sm:w-5" /> : <Play className="h-4 w-4 sm:h-5 sm:w-5" />}
             </Button>
@@ -85,7 +92,7 @@ const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProp
                 size="icon"
                 variant="ghost"
                 onClick={toggleMute}
-                className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10"
+                className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10 cursor-pointer"
               >
                 {isMuted ? (
                   <VolumeX className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -95,11 +102,12 @@ const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProp
               </Button>
               <div className="w-0 sm:w-16 md:w-0 md:group-hover/volume:w-20 overflow-hidden transition-all duration-200">
                 <Slider
+                  variant="volume"
                   value={[isMuted ? 0 : volume]}
                   max={1}
                   step={0.01}
                   onValueChange={handleVolumeChange}
-                  className="ml-2 "
+                  className="ml-2"
                 />
               </div>
             </div>
@@ -115,7 +123,7 @@ const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProp
               size="icon"
               variant="ghost"
               onClick={onWideMode}
-              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10"
+              className="hidden md:flex text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10 cursor-pointer"
               title="Wide Mode"
             >
               <Maximize2 className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -124,7 +132,7 @@ const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProp
               size="icon"
               variant="ghost"
               onClick={enterPictureInPicture}
-              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10 pip-button-mobile"
+              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10 pip-button-mobile cursor-pointer"
               title="Picture-in-Picture (Auto-activates when scrolling on mobile)"
             >
               <PictureInPicture2 className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -133,7 +141,7 @@ const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProp
               size="icon"
               variant="ghost"
               onClick={handleFullscreen}
-              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10"
+              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10 cursor-pointer"
               title="Fullscreen"
             >
               {isFullscreen ? (

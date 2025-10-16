@@ -83,7 +83,7 @@ export default function Home() {
         <div
           ref={videoPlayerRef}
           className={
-            isWideMode ? "w-full h-[60vh] order-1" : "relative aspect-video order-1 px-6 lg:px-0 lg:col-start-1"
+            isWideMode ? "w-full h-[80vh] order-1" : "relative aspect-video order-1 px-6 lg:px-0 lg:col-start-1"
           }
         >
           <VideoPlayer videoUrl={mockCourseData.videoUrl} externalVideoRef={videoRef} onWideMode={handleWideMode} />
