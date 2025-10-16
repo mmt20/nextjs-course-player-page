@@ -1,8 +1,9 @@
 "use client";
 import BreadcrumbHeader from "@/components/shared/Header/BreadcrumbHeader";
-import { Sidebar } from "@/features/course/sidebar";
-import { VideoPlayer } from "@/features/course/video-player";
-import { mockCourseData } from "@/features/course/video-player/utils";
+import Sidebar from "@/features/course/features/sidebar/components/Sidebar";
+import { VideoPlayer } from "@/features/course/features/video-player";
+import { mockCourseData } from "@/features/course/utils/mockCourseData";
+
 import { useRef, useState, useEffect } from "react";
 
 export default function Home() {

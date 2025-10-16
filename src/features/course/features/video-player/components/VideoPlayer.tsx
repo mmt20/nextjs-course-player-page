@@ -3,10 +3,14 @@
 import { Play, Pause, Volume2, VolumeX, Maximize, Minimize, Maximize2, PictureInPicture2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { VideoPlayerProps } from "../types";
 import useVideoPlayer from "../hooks";
 import { formatTime } from "../utils";
 
+interface VideoPlayerProps {
+  videoUrl: string;
+  externalVideoRef?: React.RefObject<HTMLVideoElement>;
+  onWideMode?: () => void;
+}
 const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProps) => {
   const {
     videoRef,
@@ -24,12 +28,11 @@ const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProp
     enterPictureInPicture,
   } = useVideoPlayer(videoUrl, externalVideoRef);
 
-  // Enhanced fullscreen handler that forces fullscreen even without auto-rotate
+  //  fullscreen handler that forces fullscreen even without auto-rotate
   const handleFullscreen = () => {
     if (!document.fullscreenElement) {
       const container = containerRef.current;
       if (container) {
-        // Try different fullscreen methods for cross-browser compatibility
         if (container.requestFullscreen) {
           container.requestFullscreen();
         } else if ((container as any).mozRequestFullScreen) {
@@ -60,7 +63,7 @@ const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProp
     <div ref={containerRef} className="relative bg-black overflow-hidden group w-full h-full">
       <video ref={videoRef} src={videoUrl} className="w-full h-full object-contain" onClick={togglePlay} />
 
-      {/* Progress Bar - Always on top like YouTube */}
+      {/* Progress Bar*/}
       <div className="absolute bottom-12 sm:bottom-16 left-0 right-0 px-3 sm:px-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
         <Slider
           variant="video"
@@ -72,7 +75,7 @@ const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProp
         />
       </div>
 
-      {/* Custom Controls - YouTube Style */}
+      {/* Custom Controls */}
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent px-3 sm:px-4 py-2 sm:py-3 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
         <div className="flex items-center justify-between gap-2 sm:gap-4">
           {/* Left Controls */}
@@ -86,7 +89,7 @@ const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProp
               {isPlaying ? <Pause className="h-4 w-4 sm:h-5 sm:w-5" /> : <Play className="h-4 w-4 sm:h-5 sm:w-5" />}
             </Button>
 
-            {/* Volume Control with YouTube-style hover behavior */}
+            {/* Volume Control  */}
             <div className="flex items-center group/volume">
               <Button
                 size="icon"
