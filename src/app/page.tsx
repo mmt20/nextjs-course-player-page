@@ -3,6 +3,7 @@ import BreadcrumbHeader from "@/components/shared/Header/BreadcrumbHeader";
 import { CourseComments } from "@/features/course/features/comments/components/CourseComments";
 import { CourseMaterials } from "@/features/course/features/course-materials/components/CourseMaterials";
 import Sidebar from "@/features/course/features/sidebar/components/Sidebar";
+
 import { VideoPlayer } from "@/features/course/features/video-player";
 import { mockCourseData } from "@/features/course/utils/mockCourseData";
 
@@ -106,8 +107,8 @@ export default function Home() {
         </div>
 
         {/* Sidebar  */}
-        <div className={isWideMode ? "order-2" : "order-3 lg:order-2 lg:row-start-1 lg:row-span-3 lg:col-start-2 "}>
-          <Sidebar />
+        <div className={isWideMode ? "order-2" : "order-3 lg:order-2 lg:row-start-1 lg:row-span-4 lg:col-start-2 "}>
+          <Sidebar weeks={mockCourseData.weeks} />
         </div>
 
         {/* Comments */}

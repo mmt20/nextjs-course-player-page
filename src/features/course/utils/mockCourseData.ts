@@ -86,7 +86,7 @@ export const mockCourseData: CourseData = {
     },
     {
       id: "week-5-b",
-      title: "Week 5-B",
+      title: "Week 5-8",
       description: "Advanced story telling techniques for writers: Personas, Characters & Plots",
       lessons: [
         { id: "defining-b", title: "Defining Functions", type: "video", locked: true, completed: false },
