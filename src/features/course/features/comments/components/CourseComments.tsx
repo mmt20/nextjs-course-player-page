@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowRight } from "lucide-react";
-import type { Comment } from "../types";
+import { Comment } from "@/features/course/types";
 import Image from "next/image";
 
 interface CourseCommentsProps {
