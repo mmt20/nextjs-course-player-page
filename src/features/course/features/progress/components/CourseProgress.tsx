@@ -9,7 +9,7 @@ const CourseProgress = ({ progress }: CourseProgressProps) => {
     <div className="w-full max-w-md mx-auto  py-8">
       <div className="relative">
         <div
-          className="invisible md:visible  absolute -top-14 transform -translate-x-1/2 flex flex-col items-center"
+          className="absolute -top-14 transform -translate-x-1/2 flex flex-col items-center"
           style={{ left: `${progress}%` }}
         >
           <div className="bg-white border-2 border-gray-300 rounded-full w-10 h-10 flex items-center justify-center shadow-sm">
