@@ -21,7 +21,7 @@ interface BreadcrumbHeaderProps {
 
 const BreadcrumbHeader = ({ breadcrumbs, title }: BreadcrumbHeaderProps) => {
   return (
-    <header className="px-4 py-6 border-b border-gray-200 bg-white">
+    <header className="py-6 border-b border-gray-200 bg-white">
       <Breadcrumb>
         <BreadcrumbList>
           {breadcrumbs?.map((crumb, index) => (
@@ -38,7 +38,7 @@ const BreadcrumbHeader = ({ breadcrumbs, title }: BreadcrumbHeaderProps) => {
           ))}
         </BreadcrumbList>
       </Breadcrumb>
-      <h1 className="mt-4 text-3xl sm:text-4xl font-bold text-gray-900">{title}</h1>
+      <h1 className="mt-4 md:text-4xl text-2xl font-bold text-gray-900">{title}</h1>
     </header>
   );
 };

@@ -1,5 +1,6 @@
 "use client";
 import BreadcrumbHeader from "@/components/shared/Header/BreadcrumbHeader";
+import { CourseMaterials } from "@/features/course/features/course-materials/components/CourseMaterials";
 import Sidebar from "@/features/course/features/sidebar/components/Sidebar";
 import { VideoPlayer } from "@/features/course/features/video-player";
 import { mockCourseData } from "@/features/course/utils/mockCourseData";
@@ -72,43 +73,44 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-white text-gray-800 min-h-screen font-sans">
+    <div className="bg-white text-gray-800 min-h-screen font-sans px-6 lg:px-12">
       <BreadcrumbHeader
         breadcrumbs={[{ label: "Home", href: null }, { label: "Courses", href: null }, { label: "Course Details" }]}
         title="Starting SEO as Your Home"
       />
 
-      {/* Main Layout - Uses CSS Grid order for responsive layout */}
-      <main className={`px-0 lg:px-6 ${isWideMode ? " flex flex-col " : "lg:grid lg:grid-cols-[1fr_380px]"} `}>
-        {/* Video Player - Single instance with dynamic sizing */}
+      {/* Main Layout  */}
+      <main className={`${isWideMode ? " flex flex-col " : "lg:grid lg:grid-cols-[1fr_380px]"} `}>
+        {/* Video Player  */}
         <div
           ref={videoPlayerRef}
-          className={
-            isWideMode ? "w-full h-[80vh] order-1" : "relative aspect-video order-1 px-6 lg:px-0 lg:col-start-1"
-          }
+          className={isWideMode ? "w-full h-[80vh] order-1" : "relative  aspect-video order-1 lg:px-0 lg:col-start-1"}
         >
           <VideoPlayer videoUrl={mockCourseData.videoUrl} externalVideoRef={videoRef} onWideMode={handleWideMode} />
         </div>
 
         {/* Course Materials */}
-        <div className={isWideMode ? "order-3" : "order-2 px-6 lg:px-0 lg:col-start-1"}>
-          <div className="h-96 bg-gray-100 rounded-lg p-4">
-            <h3 className="text-lg font-semibold mb-4">Course Materials</h3>
-            <p>Course content and materials will be displayed here...</p>
-          </div>
+        <div className={`${isWideMode ? "order-3" : "order-2  lg:col-start-1"} my-20 `}>
+          <h2 className="text-2xl font-bold mb-6">Course Materials</h2>
+          <CourseMaterials
+            duration={mockCourseData.duration}
+            topics={mockCourseData.topics}
+            lessons={mockCourseData.lessons}
+            price={mockCourseData.price}
+            enrolled={mockCourseData.enrolled}
+            instructor={mockCourseData.instructor}
+            language={mockCourseData.language}
+            certificate={mockCourseData.certificate}
+          />
         </div>
 
-        {/* Sidebar - Order changes based on mode and screen size */}
-        <div
-          className={
-            isWideMode ? "order-2" : "order-3 lg:order-2 lg:row-start-1 lg:row-span-3 lg:col-start-2 px-6 lg:px-0"
-          }
-        >
+        {/* Sidebar  */}
+        <div className={isWideMode ? "order-2" : "order-3 lg:order-2 lg:row-start-1 lg:row-span-3 lg:col-start-2 "}>
           <Sidebar />
         </div>
 
         {/* Comments */}
-        <div className={isWideMode ? "order-4" : "order-4 lg:order-3 lg:col-start-1 px-6 lg:px-0"}>
+        <div className={isWideMode ? "order-4" : "order-4 lg:order-3 lg:col-start-1 "}>
           <div className="h-96 bg-gray-50 rounded-lg p-4">
             <h3 className="text-lg font-semibold mb-4">Comments</h3>
             <p>Comments section will be displayed here...</p>
