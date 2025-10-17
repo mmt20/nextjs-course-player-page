@@ -101,24 +101,24 @@ export const mockCourseData: CourseData = {
   comments: [
     {
       id: "1",
-      name: "Student Name Goes Here",
-      date: "Oct 10, 2021",
+      name: "Mostafa Mohamed",
+      date: "Oct 10, 2025",
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quidem facilis tempore reiciendis laboriosam voluptatum dicta expedita aliquam nesciunt vitae eiust",
-      avatar: "/placeholder.svg?height=48&width=48",
+      avatar: "https://avatar.iran.liara.run/public/36",
     },
     {
       id: "2",
-      name: "Student Name Goes Here",
-      date: "Oct 15, 2021",
+      name: "Ahmed Ali",
+      date: "Oct 15, 2025",
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quidem facilis tempore reiciendis laboriosam voluptatum dicta expedita aliquam nesciunt vitae eiust",
-      avatar: "/placeholder.svg?height=48&width=48",
+      avatar: "https://avatar.iran.liara.run/public/1",
     },
     {
       id: "3",
-      name: "Student Name Goes Here",
-      date: "Oct 19, 2021",
+      name: "Karem Hassan",
+      date: "Oct 19, 2025",
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quidem facilis tempore reiciendis laboriosam voluptatum dicta expedita aliquam nesciunt vitae eiust",
-      avatar: "/placeholder.svg?height=48&width=48",
+      avatar: "https://avatar.iran.liara.run/public/17",
     },
   ],
 };

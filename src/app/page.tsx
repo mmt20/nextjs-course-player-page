@@ -1,5 +1,6 @@
 "use client";
 import BreadcrumbHeader from "@/components/shared/Header/BreadcrumbHeader";
+import { CourseComments } from "@/features/course/features/comments/components/CourseComments";
 import { CourseMaterials } from "@/features/course/features/course-materials/components/CourseMaterials";
 import Sidebar from "@/features/course/features/sidebar/components/Sidebar";
 import { VideoPlayer } from "@/features/course/features/video-player";
@@ -111,9 +112,9 @@ export default function Home() {
 
         {/* Comments */}
         <div className={isWideMode ? "order-4" : "order-4 lg:order-3 lg:col-start-1 "}>
-          <div className="h-96 bg-gray-50 rounded-lg p-4">
-            <h3 className="text-lg font-semibold mb-4">Comments</h3>
-            <p>Comments section will be displayed here...</p>
+          <h2 className="text-2xl font-bold mb-6">Comments</h2>
+          <div className="h-96  py-4">
+            <CourseComments comments={mockCourseData.comments} />
           </div>
         </div>
       </main>
