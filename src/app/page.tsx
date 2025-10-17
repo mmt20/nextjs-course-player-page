@@ -5,7 +5,10 @@ import { CourseMaterials } from "@/features/course/features/course-materials/com
 import Sidebar from "@/features/course/features/sidebar/components/Sidebar";
 
 import { VideoPlayer } from "@/features/course/features/video-player";
+import { Lesson } from "@/features/course/types";
 import { mockCourseData } from "@/features/course/utils/mockCourseData";
+import ExamModal from "@/features/exam";
+import { mockExam } from "@/features/exam/utils";
 
 import { useRef, useState, useEffect } from "react";
 
@@ -14,6 +17,8 @@ export default function Home() {
   const [isWideMode, setIsWideMode] = useState(false);
   const videoPlayerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null!);
+  const [examOpen, setExamOpen] = useState(false);
+  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
 
   // Handle PIP behavior on mobile scroll
   useEffect(() => {
@@ -73,7 +78,12 @@ export default function Home() {
   const handleWideMode = () => {
     setIsWideMode(!isWideMode);
   };
-
+  const handleLessonClick = (lesson: Lesson) => {
+    if (lesson.type === "exam") {
+      setExamOpen(true);
+    } else if (lesson.type === "pdf") {
+    }
+  };
   return (
     <div className="bg-white text-gray-800 min-h-screen font-sans px-6 lg:px-12">
       <BreadcrumbHeader
@@ -108,7 +118,7 @@ export default function Home() {
 
         {/* Sidebar  */}
         <div className={isWideMode ? "order-2" : "order-3 lg:order-2 lg:row-start-1 lg:row-span-4 lg:col-start-2 "}>
-          <Sidebar weeks={mockCourseData.weeks} />
+          <Sidebar weeks={mockCourseData.weeks} onLessonClick={handleLessonClick} />
         </div>
 
         {/* Comments */}
@@ -119,6 +129,8 @@ export default function Home() {
           </div>
         </div>
       </main>
+
+      <ExamModal exam={mockExam} isOpen={examOpen} onClose={() => setExamOpen(false)} />
     </div>
   );
 }

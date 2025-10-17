@@ -32,8 +32,8 @@ export const mockCourseData: CourseData = {
         {
           id: "exercise-1",
           title: "Course Exercise / Reference Files",
-          type: "pdf",
-          questions: 2,
+          type: "exam",
+          questions: 5,
           duration: "10 MINUTES",
           locked: false,
           completed: false,
@@ -41,7 +41,7 @@ export const mockCourseData: CourseData = {
         {
           id: "foundation-1",
           title: "Code Lesson Foundation / Optional",
-          type: "video",
+          type: "pdf",
           duration: "15 MINUTES",
           locked: false,
           completed: false,
@@ -67,7 +67,7 @@ export const mockCourseData: CourseData = {
           id: "return",
           title: "Return Values From Functions",
           type: "exam",
-          questions: 0,
+          questions: 5,
           duration: "10 MINUTES",
           locked: false,
           completed: false,

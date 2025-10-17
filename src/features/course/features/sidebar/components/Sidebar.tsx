@@ -5,9 +5,10 @@ import CurriculumAccordion from "./CurriculumAccordion";
 
 interface SidebarProps {
   weeks: Week[];
+  onLessonClick?: (lesson: Lesson) => void;
 }
 
-const Sidebar = ({ weeks }: SidebarProps) => {
+const Sidebar = ({ weeks, onLessonClick }: SidebarProps) => {
   return (
     <aside className="p-4 lg:p-6">
       <h2 className="text-xl font-bold mb-4  py-4">Topics for This Course</h2>
@@ -17,7 +18,7 @@ const Sidebar = ({ weeks }: SidebarProps) => {
 
       {/* Collapsible weeks  */}
       <div className=" flex flex-col gap-6 border border-gray-100 mt-4">
-        <CurriculumAccordion weeks={weeks} />
+        <CurriculumAccordion weeks={weeks} onLessonClick={onLessonClick} />
       </div>
     </aside>
   );
