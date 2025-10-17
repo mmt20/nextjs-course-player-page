@@ -26,38 +26,8 @@ const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProp
     handleVolumeChange,
     toggleMute,
     enterPictureInPicture,
+    toggleFullscreen,
   } = useVideoPlayer(videoUrl, externalVideoRef);
-
-  //  fullscreen handler that forces fullscreen even without auto-rotate
-  const handleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      const container = containerRef.current;
-      if (container) {
-        if (container.requestFullscreen) {
-          container.requestFullscreen();
-        } else if ((container as any).mozRequestFullScreen) {
-          (container as any).mozRequestFullScreen();
-        } else if ((container as any).webkitRequestFullscreen) {
-          (container as any).webkitRequestFullscreen();
-        } else if ((container as any).msRequestFullscreen) {
-          (container as any).msRequestFullscreen();
-        }
-
-        // For mobile devices, try to force landscape orientation
-        if (screen && (screen as any).orientation && (screen as any).orientation.lock) {
-          try {
-            (screen as any).orientation.lock("landscape").catch(() => {
-              // Ignore errors if orientation lock is not supported
-            });
-          } catch (e) {
-            // Ignore errors
-          }
-        }
-      }
-    } else {
-      document.exitFullscreen();
-    }
-  };
 
   return (
     <div ref={containerRef} className="relative bg-black overflow-hidden group w-full h-full">
@@ -143,7 +113,7 @@ const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProp
             <Button
               size="icon"
               variant="ghost"
-              onClick={handleFullscreen}
+              onClick={toggleFullscreen}
               className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10 cursor-pointer"
               title="Fullscreen"
             >

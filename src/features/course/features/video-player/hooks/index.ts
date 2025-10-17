@@ -94,6 +94,36 @@ const useVideoPlayer = (videoUrl: string, externalVideoRef?: React.RefObject<HTM
     }
   };
 
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      const container = containerRef.current;
+      if (container) {
+        if (container.requestFullscreen) {
+          container.requestFullscreen();
+        } else if ((container as any).mozRequestFullScreen) {
+          (container as any).mozRequestFullScreen();
+        } else if ((container as any).webkitRequestFullscreen) {
+          (container as any).webkitRequestFullscreen();
+        } else if ((container as any).msRequestFullscreen) {
+          (container as any).msRequestFullscreen();
+        }
+
+        // For mobile devices, try to force landscape orientation
+        if (screen && (screen as any).orientation && (screen as any).orientation.lock) {
+          try {
+            (screen as any).orientation.lock("landscape").catch(() => {
+              // Ignore errors if orientation lock is not supported
+            });
+          } catch (e) {
+            // Ignore errors
+          }
+        }
+      }
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
   return {
     videoRef,
     containerRef,
@@ -108,6 +138,7 @@ const useVideoPlayer = (videoUrl: string, externalVideoRef?: React.RefObject<HTM
     handleVolumeChange,
     toggleMute,
     enterPictureInPicture,
+    toggleFullscreen,
   };
 };
 
