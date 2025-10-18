@@ -1,7 +1,6 @@
 "use client";
 import BreadcrumbHeader from "@/components/shared/Header/BreadcrumbHeader";
-import { CourseComments } from "@/features/course/features/comments/components/CourseComments";
-import { CourseMaterials } from "@/features/course/features/course-materials/components/CourseMaterials";
+import { CourseComments, CourseMaterials } from "@/features/course/features";
 import Sidebar from "@/features/course/features/sidebar/components/Sidebar";
 
 import { VideoPlayer } from "@/features/course/features/video-player";
@@ -9,6 +8,7 @@ import { Lesson } from "@/features/course/types";
 import { mockCourseData } from "@/features/course/utils/mockCourseData";
 import ExamModal from "@/features/exam";
 import { mockExam } from "@/features/exam/utils";
+import { PdfViewerModal } from "@/features/pdf-viewer";
 
 import { useRef, useState, useEffect } from "react";
 
@@ -19,6 +19,7 @@ export default function Home() {
   const videoRef = useRef<HTMLVideoElement>(null!);
   const [examOpen, setExamOpen] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
+  const [pdfOpen, setPdfOpen] = useState(false);
 
   // Handle PIP behavior on mobile scroll
   useEffect(() => {
@@ -79,9 +80,11 @@ export default function Home() {
     setIsWideMode(!isWideMode);
   };
   const handleLessonClick = (lesson: Lesson) => {
-    if (lesson.type === "exam") {
+    setSelectedLesson(lesson);
+    if (lesson.type === "pdf") {
+      setPdfOpen(true);
+    } else if (lesson.type === "exam") {
       setExamOpen(true);
-    } else if (lesson.type === "pdf") {
     }
   };
   return (
@@ -131,6 +134,12 @@ export default function Home() {
       </main>
 
       <ExamModal exam={mockExam} isOpen={examOpen} onClose={() => setExamOpen(false)} />
+      <PdfViewerModal
+        pdfUrl={"https://drive.google.com/file/d/1IjquLv6XGW0IbWLq2NrgpIssnS3ugdr0"}
+        isOpen={pdfOpen}
+        onClose={() => setPdfOpen(false)}
+        title={selectedLesson?.title || "PDF Document"}
+      />
     </div>
   );
 }
