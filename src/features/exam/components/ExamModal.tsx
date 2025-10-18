@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Modal, ModalContent, ModalClose } from "@/components/ui/modal";
@@ -15,6 +17,9 @@ interface ExamModalProps {
 }
 
 export function ExamModal({ exam, isOpen, onClose }: ExamModalProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const {
     currentQuestionIndex,
     answers,
@@ -28,8 +33,20 @@ export function ExamModal({ exam, isOpen, onClose }: ExamModalProps) {
     resetExam,
   } = useExamLogic(exam, isOpen);
 
+  // Handle URL changes
+  useEffect(() => {
+    if (isOpen) {
+      const current = new URLSearchParams(searchParams.toString());
+      current.set("ExamId", exam.id);
+      router.replace(`?${current.toString()}`);
+    }
+  }, [isOpen, exam.id, router, searchParams]);
+
   const handleClose = () => {
     resetExam();
+    const current = new URLSearchParams(searchParams.toString());
+    current.delete("ExamId");
+    router.replace(`?${current.toString()}`);
     onClose();
   };
 
