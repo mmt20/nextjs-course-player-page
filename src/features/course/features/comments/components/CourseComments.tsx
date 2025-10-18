@@ -40,7 +40,7 @@ export function CourseComments({ comments }: CourseCommentsProps) {
         ))}
       </div>
 
-      <div className="pt-2 space-y-4 py-11">
+      <div className="pt-2 space-y-4 py-8">
         <Textarea
           placeholder="Write a comment"
           value={newComment}

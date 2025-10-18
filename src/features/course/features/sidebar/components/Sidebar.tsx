@@ -10,7 +10,7 @@ interface SidebarProps {
 
 const Sidebar = ({ weeks, onLessonClick }: SidebarProps) => {
   return (
-    <aside className="p-4 lg:p-6">
+    <aside>
       <h2 className="text-xl font-bold mb-4  py-4">Topics for This Course</h2>
 
       {/* Progresses Bar */}
