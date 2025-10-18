@@ -14,7 +14,7 @@ const ModalContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, ...props }, ref) => (
   <ModalPortal>
-    <div className="fixed inset-0 z-50 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700" />
+    <div className="fixed inset-0 z-50 bg-black/50" />
     <DialogPrimitive.Content
       ref={ref}
       className={cn(

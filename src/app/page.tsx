@@ -1,5 +1,6 @@
 "use client";
 import BreadcrumbHeader from "@/components/shared/Header/BreadcrumbHeader";
+import { AskQuestionModal } from "@/features/course/ask-question";
 import { CourseComments, CourseMaterials, VideoPlayer, VideoPlayerActions } from "@/features/course/features";
 import Sidebar from "@/features/course/features/sidebar/components/Sidebar";
 
@@ -21,6 +22,7 @@ export default function Home() {
   const [pdfOpen, setPdfOpen] = useState(false);
   const curriculumRef = useRef<HTMLDivElement>(null);
   const commentsRef = useRef<HTMLDivElement>(null);
+  const [askQuestionOpen, setAskQuestionOpen] = useState(false);
 
   // Handle PIP behavior on mobile scroll
   useEffect(() => {
@@ -102,7 +104,6 @@ export default function Home() {
         breadcrumbs={[{ label: "Home", href: null }, { label: "Courses", href: null }, { label: "Course Details" }]}
         title="Starting SEO as Your Home"
       />
-
       {/* Main Layout  */}
       <main className={`${isWideMode ? " flex flex-col " : "lg:grid lg:grid-cols-[1fr_380px]"} `}>
         {/* Video Player  */}
@@ -119,7 +120,7 @@ export default function Home() {
             onCurriculumClick={handleCurriculumClick}
             onCommentClick={handleCommentClick}
             onAskQuestionClick={() => {
-              console.log("Ask a Question clicked");
+              setAskQuestionOpen(true);
             }}
             onLeaderboardClick={() => {
               console.log("Leaderboard clicked");
@@ -158,7 +159,6 @@ export default function Home() {
           </div>
         </div>
       </main>
-
       <ExamModal exam={mockExam} isOpen={examOpen} onClose={() => setExamOpen(false)} />
       <PdfViewerModal
         pdfUrl={"https://drive.google.com/file/d/1IjquLv6XGW0IbWLq2NrgpIssnS3ugdr0"}
@@ -166,6 +166,7 @@ export default function Home() {
         onClose={() => setPdfOpen(false)}
         title={selectedLesson?.title || "PDF Document"}
       />
+      <AskQuestionModal isOpen={askQuestionOpen} onClose={() => setAskQuestionOpen(false)} />
     </div>
   );
 }
