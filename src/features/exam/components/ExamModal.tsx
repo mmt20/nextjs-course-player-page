@@ -3,8 +3,9 @@
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { Button } from "@/components/ui/button";
-import { Modal, ModalContent, ModalClose } from "@/components/ui/modal";
+import { Modal, ModalContent, ModalClose, ModalTitle, ModalDescription } from "@/components/ui/modal";
 import { useExamLogic } from "../hooks";
 import type { Exam } from "../types";
 import { ExamQuestions } from "./ExamQuestions";
@@ -57,6 +58,14 @@ export function ExamModal({ exam, isOpen, onClose }: ExamModalProps) {
   return (
     <Modal open={isOpen} onOpenChange={handleClose}>
       <ModalContent className="fixed inset-0 z-50 w-full max-w-none max-h-none translate-x-0 translate-y-0 top-0 left-0 overflow-auto">
+        {/* Hidden title and description for accessibility */}
+        <VisuallyHidden.Root>
+          <ModalTitle>{isCompleted ? `Exam Results: ${exam.title}` : `Exam: ${exam.title}`}</ModalTitle>
+          <ModalDescription>
+            {isCompleted ? "Review your exam answers and score" : "Complete the exam questions"}
+          </ModalDescription>
+        </VisuallyHidden.Root>
+
         {/* Close Button */}
         <div className="absolute top-4 left-4 md:top-8 md:left-8 z-10">
           <ModalClose asChild>
