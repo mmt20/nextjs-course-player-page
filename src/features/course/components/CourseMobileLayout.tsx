@@ -1,9 +1,9 @@
 "use client";
 import BreadcrumbHeader from "@/components/shared/Header/BreadcrumbHeader";
-import { AskQuestionModal } from "@/features/course/ask-question";
+import { AskQuestionModal } from "@/features/course/features/ask-question";
 import { CourseComments, CourseMaterials, VideoPlayer, VideoPlayerActions } from "@/features/course/features";
 import Sidebar from "@/features/course/features/sidebar/components/Sidebar";
-import { LeaderboardModal } from "@/features/course/leaderboard";
+import { LeaderboardModal } from "@/features/course/features/leaderboard";
 import ExamModal from "@/features/exam";
 import { mockExam } from "@/features/exam/utils";
 import { PdfViewerModal } from "@/features/pdf-viewer";
