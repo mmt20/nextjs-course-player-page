@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import useVideoPlayer from "../hooks";
 import { formatTime } from "../utils";
+import VideoPlayerActions from "./VideoPlayerActions";
 
 interface VideoPlayerProps {
   videoUrl: string;

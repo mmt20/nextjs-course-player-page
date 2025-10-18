@@ -1,9 +1,8 @@
 "use client";
 import BreadcrumbHeader from "@/components/shared/Header/BreadcrumbHeader";
-import { CourseComments, CourseMaterials } from "@/features/course/features";
+import { CourseComments, CourseMaterials, VideoPlayer, VideoPlayerActions } from "@/features/course/features";
 import Sidebar from "@/features/course/features/sidebar/components/Sidebar";
 
-import { VideoPlayer } from "@/features/course/features/video-player";
 import { Lesson } from "@/features/course/types";
 import { mockCourseData } from "@/features/course/utils/mockCourseData";
 import ExamModal from "@/features/exam";
@@ -99,9 +98,27 @@ export default function Home() {
         {/* Video Player  */}
         <div
           ref={videoPlayerRef}
-          className={isWideMode ? "w-full h-[80vh] order-1" : "relative  aspect-video order-1 lg:px-0 lg:col-start-1"}
+          className={isWideMode ? "w-full h-[80vh] order-1" : "relative  order-1 lg:px-0 lg:col-start-1"}
         >
-          <VideoPlayer videoUrl={mockCourseData.videoUrl} externalVideoRef={videoRef} onWideMode={handleWideMode} />
+          <div className="aspect-video ">
+            <VideoPlayer videoUrl={mockCourseData.videoUrl} externalVideoRef={videoRef} onWideMode={handleWideMode} />
+          </div>
+
+          {/*  video player actions */}
+          <VideoPlayerActions
+            onCurriculumClick={() => {
+              console.log("Curriculum clicked");
+            }}
+            onCommentClick={() => {
+              console.log("Comments clicked");
+            }}
+            onAskQuestionClick={() => {
+              console.log("Ask a Question clicked");
+            }}
+            onLeaderboardClick={() => {
+              console.log("Leaderboard clicked");
+            }}
+          />
         </div>
 
         {/* Course Materials */}
