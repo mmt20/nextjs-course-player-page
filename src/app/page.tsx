@@ -20,6 +20,7 @@ export default function Home() {
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [pdfOpen, setPdfOpen] = useState(false);
   const curriculumRef = useRef<HTMLDivElement>(null);
+  const commentsRef = useRef<HTMLDivElement>(null);
 
   // Handle PIP behavior on mobile scroll
   useEffect(() => {
@@ -92,6 +93,9 @@ export default function Home() {
     curriculumRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const handleCommentClick = () => {
+    commentsRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
   return (
     <div className="bg-white text-gray-800 min-h-screen font-sans px-6 lg:px-12">
       <BreadcrumbHeader
@@ -113,9 +117,7 @@ export default function Home() {
           {/*  video player actions */}
           <VideoPlayerActions
             onCurriculumClick={handleCurriculumClick}
-            onCommentClick={() => {
-              console.log("Comments clicked");
-            }}
+            onCommentClick={handleCommentClick}
             onAskQuestionClick={() => {
               console.log("Ask a Question clicked");
             }}
@@ -149,7 +151,7 @@ export default function Home() {
         </div>
 
         {/* Comments */}
-        <div className={isWideMode ? "order-4" : "order-4 lg:order-3 lg:col-start-1 "}>
+        <div ref={commentsRef} className={isWideMode ? "order-4" : "order-4 lg:order-3 lg:col-start-1 "}>
           <h2 className="text-2xl font-bold mb-6">Comments</h2>
           <div className="h-96  py-4">
             <CourseComments comments={mockCourseData.comments} />
