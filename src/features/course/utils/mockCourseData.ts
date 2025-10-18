@@ -40,9 +40,8 @@ export const mockCourseData: CourseData = {
         },
         {
           id: "foundation-1",
-          title: "Code Lesson Foundation / Optional",
+          title: "PDF File : MY CV",
           type: "pdf",
-          duration: "15 MINUTES",
           locked: false,
           completed: false,
         },
