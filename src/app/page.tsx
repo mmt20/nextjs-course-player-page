@@ -19,6 +19,7 @@ export default function Home() {
   const [examOpen, setExamOpen] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [pdfOpen, setPdfOpen] = useState(false);
+  const curriculumRef = useRef<HTMLDivElement>(null);
 
   // Handle PIP behavior on mobile scroll
   useEffect(() => {
@@ -86,6 +87,11 @@ export default function Home() {
       setExamOpen(true);
     }
   };
+
+  const handleCurriculumClick = () => {
+    curriculumRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div className="bg-white text-gray-800 min-h-screen font-sans px-6 lg:px-12">
       <BreadcrumbHeader
@@ -106,9 +112,7 @@ export default function Home() {
 
           {/*  video player actions */}
           <VideoPlayerActions
-            onCurriculumClick={() => {
-              console.log("Curriculum clicked");
-            }}
+            onCurriculumClick={handleCurriculumClick}
             onCommentClick={() => {
               console.log("Comments clicked");
             }}
@@ -137,7 +141,10 @@ export default function Home() {
         </div>
 
         {/* Sidebar  */}
-        <div className={isWideMode ? "order-2" : "order-3 lg:order-2 lg:row-start-1 lg:row-span-4 lg:col-start-2 "}>
+        <div
+          ref={curriculumRef}
+          className={isWideMode ? "order-2" : "order-3 lg:order-2 lg:row-start-1 lg:row-span-4 lg:col-start-2 "}
+        >
           <Sidebar weeks={mockCourseData.weeks} onLessonClick={handleLessonClick} />
         </div>
 
