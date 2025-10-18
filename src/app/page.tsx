@@ -3,6 +3,7 @@ import BreadcrumbHeader from "@/components/shared/Header/BreadcrumbHeader";
 import { AskQuestionModal } from "@/features/course/ask-question";
 import { CourseComments, CourseMaterials, VideoPlayer, VideoPlayerActions } from "@/features/course/features";
 import Sidebar from "@/features/course/features/sidebar/components/Sidebar";
+import { LeaderboardModal } from "@/features/course/leaderboard";
 
 import { Lesson } from "@/features/course/types";
 import { mockCourseData } from "@/features/course/utils/mockCourseData";
@@ -23,7 +24,7 @@ export default function Home() {
   const curriculumRef = useRef<HTMLDivElement>(null);
   const commentsRef = useRef<HTMLDivElement>(null);
   const [askQuestionOpen, setAskQuestionOpen] = useState(false);
-
+  const [leaderboardOpen, setLeaderboardOpen] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
       if (window.innerWidth >= 1024) return;
@@ -98,7 +99,7 @@ export default function Home() {
               onCurriculumClick={handleCurriculumClick}
               onCommentClick={handleCommentClick}
               onAskQuestionClick={() => setAskQuestionOpen(true)}
-              onLeaderboardClick={() => console.log("Leaderboard clicked")}
+              onLeaderboardClick={() => setLeaderboardOpen(true)}
             />
           </div>
 
@@ -137,6 +138,13 @@ export default function Home() {
           title={selectedLesson?.title || "PDF Document"}
         />
         <AskQuestionModal isOpen={askQuestionOpen} onClose={() => setAskQuestionOpen(false)} />
+        <LeaderboardModal
+          leaderboardId="leaderboard-1"
+          courseName={mockCourseData.title}
+          instructorName={mockCourseData.instructor}
+          isOpen={leaderboardOpen}
+          onClose={() => setLeaderboardOpen(false)}
+        />
       </div>
     );
   }
@@ -159,7 +167,7 @@ export default function Home() {
             onCurriculumClick={handleCurriculumClick}
             onCommentClick={handleCommentClick}
             onAskQuestionClick={() => setAskQuestionOpen(true)}
-            onLeaderboardClick={() => console.log("Leaderboard clicked")}
+            onLeaderboardClick={() => setLeaderboardOpen(true)}
           />
         </div>
 
@@ -200,6 +208,13 @@ export default function Home() {
         title={selectedLesson?.title || "PDF Document"}
       />
       <AskQuestionModal isOpen={askQuestionOpen} onClose={() => setAskQuestionOpen(false)} />
+      <LeaderboardModal
+        leaderboardId="leaderboard-1"
+        courseName={mockCourseData.title}
+        instructorName={mockCourseData.instructor}
+        isOpen={leaderboardOpen}
+        onClose={() => setLeaderboardOpen(false)}
+      />
     </div>
   );
 }

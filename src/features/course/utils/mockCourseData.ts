@@ -10,7 +10,7 @@ export const mockCourseData: CourseData = {
   lessons: 8,
   price: 80,
   enrolled: 65,
-  instructor: "Alex Snow",
+  instructor: "Ali Shahin",
   language: "English",
   certificate: true,
   progress: 63,
