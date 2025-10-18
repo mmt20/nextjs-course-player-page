@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
-import { Modal, ModalContent, ModalClose, ModalTitle, ModalDescription } from "@/components/ui/modal";
+import { Modal, ModalPortal, ModalClose, ModalTitle, ModalDescription } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
@@ -23,7 +23,6 @@ export function PdfViewerModal({ pdfUrl, isOpen, onClose, title = "PDF Viewer" }
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Handle URL changes
   useEffect(() => {
     if (isOpen) {
       const current = new URLSearchParams(searchParams.toString());
@@ -45,14 +44,14 @@ export function PdfViewerModal({ pdfUrl, isOpen, onClose, title = "PDF Viewer" }
 
   return (
     <Modal open={isOpen} onOpenChange={handleClose}>
-      <ModalContent className="fixed inset-0 z-50 w-full h-screen max-w-none max-h-none translate-x-0 translate-y-0 top-0 left-0 overflow-hidden p-0">
-        {/* Hidden title and description for accessibility */}
-        <VisuallyHidden.Root>
-          <ModalTitle>{title}</ModalTitle>
-          <ModalDescription>PDF document viewer</ModalDescription>
-        </VisuallyHidden.Root>
+      <ModalPortal>
+        <div className="fixed inset-0 z-50 w-full h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 overflow-hidden flex flex-col">
+          {/* Hidden title and description for accessibility */}
+          <VisuallyHidden.Root>
+            <ModalTitle>{title}</ModalTitle>
+            <ModalDescription>PDF document viewer</ModalDescription>
+          </VisuallyHidden.Root>
 
-        <div className="w-full h-full flex flex-col bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700">
           {/* Header */}
           <div className="flex items-center justify-between h-16 px-4 md:px-8 bg-black/20 backdrop-blur-sm flex-shrink-0">
             <h1 className="text-xl md:text-2xl font-bold text-white flex-1 truncate pr-4">{title}</h1>
@@ -66,7 +65,7 @@ export function PdfViewerModal({ pdfUrl, isOpen, onClose, title = "PDF Viewer" }
           {/* PDF Viewer */}
           <PdfViewer fileUrl={safePdfUrl} />
         </div>
-      </ModalContent>
+      </ModalPortal>
     </Modal>
   );
 }
