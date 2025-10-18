@@ -13,17 +13,23 @@ interface CourseCommentsProps {
 
 export function CourseComments({ comments }: CourseCommentsProps) {
   const [newComment, setNewComment] = useState("");
+  const isLastComment = (index: number) => index === comments.length - 1;
 
   const handleSubmit = () => {
     console.log("New comment:", newComment);
     setNewComment("");
   };
-
+  const shouldShowBorder = (index: number) => {
+    return !isLastComment(index);
+  };
   return (
     <div className="space-y-8">
       <div className="space-y-8">
-        {comments.map((comment) => (
-          <div key={comment.id} className="flex gap-4 border-b border-gray-200 pb-6 ">
+        {comments.map((comment, index) => (
+          <div
+            key={comment.id}
+            className={`flex gap-4  ${shouldShowBorder(index) && "border-b border-gray-200"}     pb-6 `}
+          >
             <Image
               src={comment.avatar}
               alt={comment.name}

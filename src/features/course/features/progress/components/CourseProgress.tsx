@@ -6,7 +6,7 @@ interface CourseProgressProps {
 
 const CourseProgress = ({ progress }: CourseProgressProps) => {
   return (
-    <div className="w-full max-w-md mx-auto  py-8">
+    <div className="w-full mx-auto  py-8">
       <div className="relative">
         <div
           className="absolute -top-14 transform -translate-x-1/2 flex flex-col items-center"
