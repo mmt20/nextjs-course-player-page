@@ -37,7 +37,7 @@ const VideoPlayer = ({ videoUrl, thumbnail, externalVideoRef, onWideMode }: Vide
       <video
         ref={videoRef as React.RefObject<HTMLVideoElement | null>}
         src={videoUrl}
-        className={`w-full h-full ${isFullscreen ? "object-cover" : "object-contain"}`}
+        className={`w-full h-full ${isFullscreen ? "sm:object-cover md:object-cover " : "object-contain"}`}
         onClick={togglePlay}
         preload="auto"
       />
