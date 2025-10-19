@@ -31,7 +31,7 @@ const VideoPlayer = ({ videoUrl, thumbnail, externalVideoRef, onWideMode }: Vide
     enterPictureInPicture,
     toggleFullscreen,
   } = useVideoPlayer(videoUrl, externalVideoRef);
-
+  console.log("duration", duration);
   return (
     <div ref={containerRef} className="relative bg-black overflow-hidden group w-full h-full">
       <video

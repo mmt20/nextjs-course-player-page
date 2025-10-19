@@ -15,13 +15,22 @@ const useVideoPlayer = (videoUrl: string, externalVideoRef?: React.RefObject<HTM
     const video = videoRef.current;
     if (!video) return;
 
+    // Reset duration when videoUrl changes
+    setDuration(0);
+
     const handleTimeUpdate = () => setCurrentTime(video.currentTime);
-    const handleLoadedMetadata = () => setDuration(video.duration);
+    const handleLoadedMetadata = () => {
+      setDuration(video.duration || 0);
+    };
     const handleEnded = () => setIsPlaying(false);
 
     video.addEventListener("timeupdate", handleTimeUpdate);
     video.addEventListener("loadedmetadata", handleLoadedMetadata);
     video.addEventListener("ended", handleEnded);
+
+    if (video.readyState >= 1 && video.duration) {
+      setDuration(video.duration);
+    }
 
     // Listen for fullscreen changes
     const handleFullscreenChange = () => {
@@ -42,7 +51,7 @@ const useVideoPlayer = (videoUrl: string, externalVideoRef?: React.RefObject<HTM
       document.removeEventListener("mozfullscreenchange", handleFullscreenChange);
       document.removeEventListener("MSFullscreenChange", handleFullscreenChange);
     };
-  }, [videoRef]);
+  }, [videoRef, videoUrl]);
 
   const togglePlay = () => {
     if (videoRef.current) {
