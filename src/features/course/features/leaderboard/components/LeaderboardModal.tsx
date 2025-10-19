@@ -9,6 +9,7 @@ import { Modal, ModalPortal, ModalClose, ModalTitle, ModalDescription } from "@/
 import { useLeaderboardLogic } from "../hooks";
 import type { LeaderboardEntry, studentLevel } from "../types";
 import { mockLeaderboard } from "../utils";
+import Image from "next/image";
 
 interface LeaderboardModalProps {
   leaderboardId: string;
@@ -101,12 +102,13 @@ export function LeaderboardModal({
                   </div>
 
                   {/* Avatar */}
-                  <img
+                  <Image
                     src={entry.avatar}
                     alt={entry.name}
-                    className="h-10 w-10 rounded-full object-cover flex-shrink-0"
+                    width={40}
+                    height={40}
+                    className="rounded-full object-cover flex-shrink-0"
                   />
-
                   {/* Info */}
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-sm text-gray-900">{entry.name}</p>

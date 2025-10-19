@@ -33,7 +33,6 @@ export interface UseCoursePage {
 }
 
 export function useCoursePage(): UseCoursePage | null {
-  // Ensure type is explicit
   // Lifecycle state
   const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);

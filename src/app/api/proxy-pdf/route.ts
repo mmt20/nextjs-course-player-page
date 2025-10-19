@@ -22,6 +22,7 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
-    return new Response("Error fetching PDF", { status: 500 });
+    const message = error instanceof Error ? error.message : String(error);
+    return new Response(message, { status: 500 });
   }
 }
