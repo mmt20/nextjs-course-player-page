@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import { Lesson } from "@/features/course/types";
 
 export interface UseCoursePage {
@@ -118,36 +118,53 @@ export function useCoursePage(): UseCoursePage | null {
     }
   }, []);
 
+  // Memoize the returned object so consumers receive stable references
+  const memoizedReturn = useMemo(
+    () => ({
+      // Meta
+      isMobile,
+      isWideMode,
+
+      // Modal states
+      examOpen,
+      pdfOpen,
+      askQuestionOpen,
+      leaderboardOpen,
+      selectedLesson,
+
+      // Refs
+      videoPlayerRef,
+      videoRef,
+      curriculumRef,
+      commentsRef,
+
+      // Handlers
+      handleWideMode,
+      handleLessonClick,
+      scrollToRef,
+
+      // Modal setters
+      setExamOpen,
+      setPdfOpen,
+      setAskQuestionOpen,
+      setLeaderboardOpen,
+    }),
+    [
+      isMobile,
+      isWideMode,
+      examOpen,
+      pdfOpen,
+      askQuestionOpen,
+      leaderboardOpen,
+      selectedLesson,
+      handleWideMode,
+      handleLessonClick,
+      scrollToRef,
+    ]
+  );
+
   // Return null during SSR/hydration mismatch
   if (!mounted) return null;
 
-  return {
-    // Meta
-    isMobile,
-    isWideMode,
-
-    // Modal states
-    examOpen,
-    pdfOpen,
-    askQuestionOpen,
-    leaderboardOpen,
-    selectedLesson,
-
-    // Refs
-    videoPlayerRef,
-    videoRef,
-    curriculumRef,
-    commentsRef,
-
-    // Handlers
-    handleWideMode,
-    handleLessonClick,
-    scrollToRef,
-
-    // Modal setters
-    setExamOpen,
-    setPdfOpen,
-    setAskQuestionOpen,
-    setLeaderboardOpen,
-  };
+  return memoizedReturn;
 }

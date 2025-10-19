@@ -1,3 +1,4 @@
+import React from "react";
 import { getMaterials } from "../utils/materials";
 import { CourseMaterialsProps, MaterialItem } from "../types";
 
@@ -30,3 +31,5 @@ export function CourseMaterials(props: CourseMaterialsProps) {
     </div>
   );
 }
+
+export default React.memo(CourseMaterials);

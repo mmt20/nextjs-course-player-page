@@ -1,4 +1,5 @@
 "use client";
+import React, { useCallback } from "react";
 import BreadcrumbHeader from "@/components/shared/Header/BreadcrumbHeader";
 import dynamic from "next/dynamic";
 import { CourseComments, CourseMaterials } from "@/features/course/features";
@@ -27,6 +28,12 @@ const PdfViewerModal = dynamic(() => import("@/features/pdf-viewer").then((mod) 
 export default function CoursePage() {
   const data = useCoursePage();
 
+  // Move all useCallback hooks to top-level
+  const handleCurriculumClick = useCallback(() => data?.scrollToRef(data.curriculumRef), [data]);
+  const handleCommentClick = useCallback(() => data?.scrollToRef(data.commentsRef), [data]);
+  const handleAskQuestionClick = useCallback(() => data?.setAskQuestionOpen(true), [data]);
+  const handleLeaderboardClick = useCallback(() => data?.setLeaderboardOpen(true), [data]);
+
   if (!data) return null;
 
   const layoutClass = data.isMobile ? "flex flex-col gap-6" : "lg:grid lg:grid-cols-[1fr_380px] gap-6";
@@ -50,10 +57,10 @@ export default function CoursePage() {
             />
           </div>
           <VideoPlayerActions
-            onCurriculumClick={() => data.scrollToRef(data.curriculumRef)}
-            onCommentClick={() => data.scrollToRef(data.commentsRef)}
-            onAskQuestionClick={() => data.setAskQuestionOpen(true)}
-            onLeaderboardClick={() => data.setLeaderboardOpen(true)}
+            onCurriculumClick={handleCurriculumClick}
+            onCommentClick={handleCommentClick}
+            onAskQuestionClick={handleAskQuestionClick}
+            onLeaderboardClick={handleLeaderboardClick}
           />
         </div>
 
