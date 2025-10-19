@@ -52,8 +52,9 @@ export function useCoursePage(): UseCoursePage | null {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const curriculumRef = useRef<HTMLDivElement>(null);
   const commentsRef = useRef<HTMLDivElement>(null);
+  const pipTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Responsive check - stable reference
+  // Responsive check
   const checkMobile = useCallback((wideMode: boolean) => {
     const isCurrentlyMobile = window.innerWidth < 1024 || wideMode;
     setIsMobile(isCurrentlyMobile);
@@ -70,31 +71,53 @@ export function useCoursePage(): UseCoursePage | null {
     return () => window.removeEventListener("resize", handleResize);
   }, [isWideMode, checkMobile]);
 
-  // Picture-in-Picture effect for mobile
   useEffect(() => {
     // Only enable PiP on mobile viewport
-    if (!isMobile) return;
+    if (!isMobile || isWideMode || !videoPlayerRef.current || !videoRef.current) return;
+
+    const videoElement = videoRef.current;
+    const videoContainer = videoPlayerRef.current;
 
     const handleScroll = () => {
-      if (!videoPlayerRef.current || !videoRef.current) return;
+      // Clear pending timeout to avoid race conditions
+      if (pipTimeoutRef.current) clearTimeout(pipTimeoutRef.current);
 
-      const videoRect = videoPlayerRef.current.getBoundingClientRect();
-      const shouldEnterPip = videoRect.top <= -100;
-      const isPipActive = !!document.pictureInPictureElement;
+      const videoRect = videoContainer.getBoundingClientRect();
+      // Video considered "scrolled away" when top is above -100px
+      const shouldEnterPip = videoRect.top < -100;
+      const isPipActive = document.pictureInPictureElement === videoElement;
 
-      try {
-        if (shouldEnterPip && !isPipActive && document.pictureInPictureEnabled) {
-          videoRef.current.requestPictureInPicture().catch(() => {});
-        } else if (!shouldEnterPip && isPipActive) {
-          document.exitPictureInPicture().catch(() => {});
+      // Debounce PiP state changes to prevent rapid toggles
+      pipTimeoutRef.current = setTimeout(async () => {
+        try {
+          // Exit PiP if video scrolled back into view
+          if (!shouldEnterPip && isPipActive) {
+            await document.exitPictureInPicture();
+          }
+          // Enter PiP if video scrolled out and PiP available
+          else if (shouldEnterPip && !isPipActive && document.pictureInPictureEnabled) {
+            await videoElement.requestPictureInPicture();
+          }
+        } catch (error) {
+          // Silently handle PiP errors (user may deny permission, etc)
+          if (error instanceof DOMException && error.name !== "NotAllowedError") {
+            console.warn("PiP toggle failed:", error.message);
+          }
         }
-      } catch (error) {
-        console.error("PiP error:", error);
-      }
+      }, 100); // 100ms debounce
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (pipTimeoutRef.current) clearTimeout(pipTimeoutRef.current);
+
+      // Exit PiP on unmount if active
+      if (document.pictureInPictureElement === videoElement) {
+        document.exitPictureInPicture().catch(() => {});
+      }
+    };
   }, [isMobile]);
 
   // Scroll to ref with smooth behavior
@@ -118,7 +141,6 @@ export function useCoursePage(): UseCoursePage | null {
     }
   }, []);
 
-  // Memoize the returned object so consumers receive stable references
   const memoizedReturn = useMemo(
     () => ({
       // Meta
@@ -163,7 +185,6 @@ export function useCoursePage(): UseCoursePage | null {
     ]
   );
 
-  // Return null during SSR/hydration mismatch
   if (!mounted) return null;
 
   return memoizedReturn;
