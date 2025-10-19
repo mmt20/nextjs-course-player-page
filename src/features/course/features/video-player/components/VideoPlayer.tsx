@@ -39,12 +39,21 @@ const VideoPlayer = ({ videoUrl, thumbnail, externalVideoRef, onWideMode }: Vide
         src={videoUrl}
         className="w-full h-full object-contain"
         onClick={togglePlay}
+        preload="auto"
       />
 
       {/* Thumbnail overlay with centered play button (shows only before first play) */}
       {!isPlaying && currentTime === 0 && thumbnail && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-black">
-          <Image src={thumbnail} alt="Video thumbnail" fill className="object-cover z-0" draggable={false} priority />
+          <Image
+            src={thumbnail}
+            alt="Video thumbnail"
+            fill
+            className="object-cover z-0"
+            draggable={false}
+            priority
+            fetchPriority="high"
+          />
           <button
             onClick={togglePlay}
             aria-label="Play video"
