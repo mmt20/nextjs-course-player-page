@@ -23,7 +23,7 @@ export function ExamAnswers({ exam, answers, score, onRetake }: ExamAnswersProps
   const isPassed = score.percentage >= 60;
 
   return (
-    <div className="min-h-screen p-4 md:p-8 flex flex-col">
+    <div className="min-h-screen p-4 md:p-8 flex flex-col  mt-16 md:mt-0">
       {/* Score Card */}
       <div className="max-w-2xl mx-auto w-full mb-8">
         <div
