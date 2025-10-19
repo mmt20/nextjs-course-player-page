@@ -28,6 +28,7 @@ export interface CourseData {
   id: string;
   title: string;
   videoUrl: string;
+  thumbnail?: string;
   duration: string;
   topics: number;
   lessons: number;

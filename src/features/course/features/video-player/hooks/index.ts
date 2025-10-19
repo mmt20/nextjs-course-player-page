@@ -98,23 +98,39 @@ const useVideoPlayer = (videoUrl: string, externalVideoRef?: React.RefObject<HTM
     if (!document.fullscreenElement) {
       const container = containerRef.current;
       if (container) {
-        if (container.requestFullscreen) {
-          container.requestFullscreen();
-        } else if ((container as any).mozRequestFullScreen) {
-          (container as any).mozRequestFullScreen();
-        } else if ((container as any).webkitRequestFullscreen) {
-          (container as any).webkitRequestFullscreen();
-        } else if ((container as any).msRequestFullscreen) {
-          (container as any).msRequestFullscreen();
+        // Add vendor-prefixed fullscreen methods with proper typing to avoid `any` usage
+        type VendorFullscreenElement = HTMLElement & {
+          mozRequestFullScreen?: () => void | Promise<void>;
+          webkitRequestFullscreen?: () => void;
+          msRequestFullscreen?: () => void;
+        };
+
+        const el = container as VendorFullscreenElement;
+
+        if (el.requestFullscreen) {
+          el.requestFullscreen();
+        } else if (el.mozRequestFullScreen) {
+          el.mozRequestFullScreen();
+        } else if (el.webkitRequestFullscreen) {
+          el.webkitRequestFullscreen();
+        } else if (el.msRequestFullscreen) {
+          el.msRequestFullscreen();
         }
 
         // For mobile devices, try to force landscape orientation
-        if (screen && (screen as any).orientation && (screen as any).orientation.lock) {
+        // Try to lock orientation to landscape on mobile devices (if supported)
+        const scr = screen as Screen & {
+          orientation?: {
+            lock?: (mode: "landscape" | "portrait") => Promise<void>;
+          };
+        };
+
+        if (scr.orientation?.lock) {
           try {
-            (screen as any).orientation.lock("landscape").catch(() => {
+            scr.orientation.lock("landscape").catch(() => {
               // Ignore errors if orientation lock is not supported
             });
-          } catch (e) {
+          } catch {
             // Ignore errors
           }
         }

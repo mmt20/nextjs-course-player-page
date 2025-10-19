@@ -3,8 +3,9 @@ import { CourseData } from "../types";
 // Mock course data
 export const mockCourseData: CourseData = {
   id: "seo-course",
-  title: "Starting SEO as your Home",
-  videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+  title: "Starting SEO at Home",
+  videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+  thumbnail: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/Sintel.jpg",
   duration: "3 weeks",
   topics: 36,
   lessons: 8,

@@ -1,6 +1,7 @@
 "use client";
 
 import { Play, Pause, Volume2, VolumeX, Maximize, Minimize, Maximize2, PictureInPicture2 } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import useVideoPlayer from "../hooks";
@@ -8,11 +9,12 @@ import { formatTime } from "../utils";
 
 interface VideoPlayerProps {
   videoUrl: string;
+  thumbnail?: string;
   externalVideoRef?: React.RefObject<HTMLVideoElement | null>;
   onWideMode?: () => void;
 }
 
-const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProps) => {
+const VideoPlayer = ({ videoUrl, thumbnail, externalVideoRef, onWideMode }: VideoPlayerProps) => {
   const {
     videoRef,
     containerRef,
@@ -32,7 +34,26 @@ const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProp
 
   return (
     <div ref={containerRef} className="relative bg-black overflow-hidden group w-full h-full">
-  <video ref={videoRef as React.RefObject<HTMLVideoElement | null>} src={videoUrl} className="w-full h-full object-contain" onClick={togglePlay} />
+      <video
+        ref={videoRef as React.RefObject<HTMLVideoElement | null>}
+        src={videoUrl}
+        className="w-full h-full object-contain"
+        onClick={togglePlay}
+      />
+
+      {/* Thumbnail overlay with centered play button (shows only before first play) */}
+      {!isPlaying && currentTime === 0 && thumbnail && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black">
+          <Image src={thumbnail} alt="Video thumbnail" fill className="object-cover z-0" draggable={false} priority />
+          <button
+            onClick={togglePlay}
+            aria-label="Play video"
+            className="relative z-10 flex items-center justify-center w-14 h-14 rounded-full bg-black/40 text-white cursor-pointer"
+          >
+            <Play className="h-7 w-7" />
+          </button>
+        </div>
+      )}
 
       {/* Progress Bar*/}
       <div className="absolute bottom-12 sm:bottom-16 left-0 right-0 px-3 sm:px-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">

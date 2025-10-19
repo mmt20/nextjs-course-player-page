@@ -30,6 +30,7 @@ export default function CoursePage() {
           <div className={data.isMobile ? (data.isWideMode ? "w-full h-[60vh]" : "aspect-video") : "aspect-video"}>
             <VideoPlayer
               videoUrl={mockCourseData.videoUrl}
+              thumbnail={mockCourseData.thumbnail}
               externalVideoRef={data.videoRef}
               onWideMode={data.handleWideMode}
             />
