@@ -1,67 +1,138 @@
 "use client";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { Lesson } from "@/features/course/types";
 
-export function useCoursePage() {
+export interface UseCoursePage {
+  // Meta
+  isMobile: boolean;
+  isWideMode: boolean;
+
+  // Modal states
+  examOpen: boolean;
+  pdfOpen: boolean;
+  askQuestionOpen: boolean;
+  leaderboardOpen: boolean;
+  selectedLesson: Lesson | null;
+
+  // Refs
+  videoPlayerRef: React.RefObject<HTMLDivElement | null>;
+  videoRef: React.RefObject<HTMLVideoElement | null>;
+  curriculumRef: React.RefObject<HTMLDivElement | null>;
+  commentsRef: React.RefObject<HTMLDivElement | null>;
+
+  // Handlers
+  handleWideMode: () => void;
+  handleLessonClick: (lesson: Lesson) => void;
+  scrollToRef: (ref: React.RefObject<HTMLDivElement | null>) => void;
+
+  // Modal setters
+  setExamOpen: (open: boolean) => void;
+  setPdfOpen: (open: boolean) => void;
+  setAskQuestionOpen: (open: boolean) => void;
+  setLeaderboardOpen: (open: boolean) => void;
+}
+
+export function useCoursePage(): UseCoursePage | null {
+  // Ensure type is explicit
+  // Lifecycle state
+  const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Mode state
   const [isWideMode, setIsWideMode] = useState(false);
+
+  // Modal states
   const [examOpen, setExamOpen] = useState(false);
-  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [pdfOpen, setPdfOpen] = useState(false);
   const [askQuestionOpen, setAskQuestionOpen] = useState(false);
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
+  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
 
-  const videoPlayerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null!);
+  // Refs
+  const videoPlayerRef = useRef<HTMLDivElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const curriculumRef = useRef<HTMLDivElement>(null);
   const commentsRef = useRef<HTMLDivElement>(null);
 
-  // Picture-in-Picture Effect
+  // Responsive check - stable reference
+  const checkMobile = useCallback((wideMode: boolean) => {
+    const isCurrentlyMobile = window.innerWidth < 1024 || wideMode;
+    setIsMobile(isCurrentlyMobile);
+  }, []);
+
+  // Initialize and setup resize listener
   useEffect(() => {
+    setMounted(true);
+    checkMobile(isWideMode);
+
+    const handleResize = () => checkMobile(isWideMode);
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isWideMode, checkMobile]);
+
+  // Picture-in-Picture effect for mobile
+  useEffect(() => {
+    // Only enable PiP on mobile viewport
+    if (!isMobile) return;
+
     const handleScroll = () => {
-      if (window.innerWidth >= 1024) return;
+      if (!videoPlayerRef.current || !videoRef.current) return;
 
-      if (videoPlayerRef.current && videoRef.current) {
-        const videoRect = videoPlayerRef.current.getBoundingClientRect();
-        const shouldEnterPip = videoRect.top <= -100;
-        const isPipCurrentlyActive = !!document.pictureInPictureElement;
+      const videoRect = videoPlayerRef.current.getBoundingClientRect();
+      const shouldEnterPip = videoRect.top <= -100;
+      const isPipActive = !!document.pictureInPictureElement;
 
-        if (shouldEnterPip && !isPipCurrentlyActive && document.pictureInPictureEnabled) {
+      try {
+        if (shouldEnterPip && !isPipActive && document.pictureInPictureEnabled) {
           videoRef.current.requestPictureInPicture().catch(() => {});
-        } else if (!shouldEnterPip && isPipCurrentlyActive) {
+        } else if (!shouldEnterPip && isPipActive) {
           document.exitPictureInPicture().catch(() => {});
         }
+      } catch (error) {
+        console.error("PiP error:", error);
       }
     };
 
     window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isMobile]);
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
-    };
+  // Scroll to ref with smooth behavior
+  const scrollToRef = useCallback((ref: React.RefObject<HTMLDivElement | null>) => {
+    ref.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  const handleWideMode = () => setIsWideMode(!isWideMode);
+  // Handle wide mode toggle
+  const handleWideMode = useCallback(() => {
+    setIsWideMode((prev) => !prev);
+  }, []);
 
-  const handleLessonClick = (lesson: Lesson) => {
+  // Handle lesson click and determine modal type
+  const handleLessonClick = useCallback((lesson: Lesson) => {
     setSelectedLesson(lesson);
-    if (lesson.type === "pdf") setPdfOpen(true);
-    else if (lesson.type === "exam") setExamOpen(true);
-  };
 
-  const handleCurriculumClick = () => curriculumRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (lesson.type === "pdf") {
+      setPdfOpen(true);
+    } else if (lesson.type === "exam") {
+      setExamOpen(true);
+    }
+  }, []);
 
-  const handleCommentClick = () => commentsRef.current?.scrollIntoView({ behavior: "smooth" });
+  // Return null during SSR/hydration mismatch
+  if (!mounted) return null;
 
   return {
-    // State
+    // Meta
+    isMobile,
     isWideMode,
+
+    // Modal states
     examOpen,
-    selectedLesson,
     pdfOpen,
     askQuestionOpen,
     leaderboardOpen,
+    selectedLesson,
 
     // Refs
     videoPlayerRef,
@@ -72,8 +143,9 @@ export function useCoursePage() {
     // Handlers
     handleWideMode,
     handleLessonClick,
-    handleCurriculumClick,
-    handleCommentClick,
+    scrollToRef,
+
+    // Modal setters
     setExamOpen,
     setPdfOpen,
     setAskQuestionOpen,

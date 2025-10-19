@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 
-const useVideoPlayer = (videoUrl: string, externalVideoRef?: React.RefObject<HTMLVideoElement>) => {
+const useVideoPlayer = (videoUrl: string, externalVideoRef?: React.RefObject<HTMLVideoElement | null>) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const internalVideoRef = useRef<HTMLVideoElement>(null);
-  const videoRef = externalVideoRef || internalVideoRef;
+  const internalVideoRef = useRef<HTMLVideoElement | null>(null);
+  const videoRef: React.RefObject<HTMLVideoElement | null> = externalVideoRef || internalVideoRef;
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const useVideoPlayer = (videoUrl: string, externalVideoRef?: React.RefObject<HTM
       document.removeEventListener("mozfullscreenchange", handleFullscreenChange);
       document.removeEventListener("MSFullscreenChange", handleFullscreenChange);
     };
-  }, []);
+  }, [videoRef]);
 
   const togglePlay = () => {
     if (videoRef.current) {

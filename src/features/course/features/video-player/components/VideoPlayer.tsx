@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import useVideoPlayer from "../hooks";
 import { formatTime } from "../utils";
-import VideoPlayerActions from "./VideoPlayerActions";
 
 interface VideoPlayerProps {
   videoUrl: string;
-  externalVideoRef?: React.RefObject<HTMLVideoElement>;
+  externalVideoRef?: React.RefObject<HTMLVideoElement | null>;
   onWideMode?: () => void;
 }
+
 const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProps) => {
   const {
     videoRef,
@@ -32,7 +32,7 @@ const VideoPlayer = ({ videoUrl, externalVideoRef, onWideMode }: VideoPlayerProp
 
   return (
     <div ref={containerRef} className="relative bg-black overflow-hidden group w-full h-full">
-      <video ref={videoRef} src={videoUrl} className="w-full h-full object-contain" onClick={togglePlay} />
+  <video ref={videoRef as React.RefObject<HTMLVideoElement | null>} src={videoUrl} className="w-full h-full object-contain" onClick={togglePlay} />
 
       {/* Progress Bar*/}
       <div className="absolute bottom-12 sm:bottom-16 left-0 right-0 px-3 sm:px-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
