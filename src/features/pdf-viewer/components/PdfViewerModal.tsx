@@ -10,7 +10,8 @@ import { ArrowLeft } from "lucide-react";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { getSafePdfUrl } from "../utils";
-import PdfViewer from "./PdfViewer";
+import dynamic from "next/dynamic";
+const PdfViewer = dynamic(() => import("./PdfViewer"), { ssr: false });
 
 interface PdfViewerModalProps {
   pdfUrl: string;

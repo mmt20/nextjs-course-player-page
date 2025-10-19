@@ -1,14 +1,28 @@
 "use client";
 import BreadcrumbHeader from "@/components/shared/Header/BreadcrumbHeader";
-import { AskQuestionModal } from "@/features/course/features/ask-question";
-import { CourseComments, CourseMaterials, VideoPlayer, VideoPlayerActions } from "@/features/course/features";
+import dynamic from "next/dynamic";
+import { CourseComments, CourseMaterials } from "@/features/course/features";
 import Sidebar from "@/features/course/features/sidebar/components/Sidebar";
-import { LeaderboardModal } from "@/features/course/features/leaderboard";
-import ExamModal from "@/features/exam";
 import { mockExam } from "@/features/exam/utils";
-import { PdfViewerModal } from "@/features/pdf-viewer";
+
 import { mockCourseData } from "@/features/course/utils/mockCourseData";
-import { useCoursePage, type UseCoursePage } from "@/features/course/hooks/useCoursePage";
+import { useCoursePage } from "@/features/course/hooks/useCoursePage";
+
+// Dynamically import heavy components
+const VideoPlayer = dynamic(() => import("@/features/course/features").then((mod) => mod.VideoPlayer), { ssr: false });
+const VideoPlayerActions = dynamic(() => import("@/features/course/features").then((mod) => mod.VideoPlayerActions), {
+  ssr: false,
+});
+const AskQuestionModal = dynamic(
+  () => import("@/features/course/features/ask-question").then((mod) => mod.AskQuestionModal),
+  { ssr: false }
+);
+const LeaderboardModal = dynamic(
+  () => import("@/features/course/features/leaderboard").then((mod) => mod.LeaderboardModal),
+  { ssr: false }
+);
+const ExamModal = dynamic(() => import("@/features/exam").then((mod) => mod.default), { ssr: false });
+const PdfViewerModal = dynamic(() => import("@/features/pdf-viewer").then((mod) => mod.PdfViewerModal), { ssr: false });
 
 export default function CoursePage() {
   const data = useCoursePage();
