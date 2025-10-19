@@ -1,36 +1,148 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<!--
+	IT Legend Job Task: Next.js Course Player
+	Author: Mostafa Mohamed
+	Last updated: October 19, 2025
+-->
 
-## Getting Started
+# Next.js Course Player — IT Legend Task
 
-First, run the development server:
+A compact, production-minded course player built with Next.js (App Router), React 19, and TypeScript. This project demonstrates a modular UI, accessible patterns, and client-driven UX for learning platforms: video playback with mobile PiP, curriculum navigation, PDF embedding, exams, comments, and leaderboard.
+
+> Last updated: October 19, 2025
+
+## 🔗 Quick Links
+
+- Live demo: [live Demo](https://course-player-eight.vercel.app/)
+- Video demo: [Video Demo](https://drive.google.com/file/d/17_FPdbNnojI_vrmvY8_Mu78Fgjc79E1W/view?usp=sharing)
+
+- Figma File: [Figma File ](https://www.figma.com/design/M6RfSjHqm6glEN1BQR1WFl/ITLegend-Course-Player-Page-Test?node-id=0-1&p=f&t=nPMUCoS28qCk6rwY-0)
+
+## 📑 Table of Contents
+
+- [What you’ll find](#what-youll-find)
+- [Architecture & Design](#architecture--design)
+- [Key Features](#key-features)
+- [Developer Setup](#developer-setup)
+- [Code Walkthrough (where to look)](#code-walkthrough-where-to-look)
+
+## 🎯 What you'll find
+
+- A responsive Course page with:
+  - Custom video player (playback, volume, seek, PiP, fullscreen)
+  - Curriculum sidebar (week/lesson grouping, locked lessons)
+  - Course materials panel (duration, topics, price)
+  - Comments, exams, and a leaderboard (modal-driven flows)
+- PDF integration (react-pdf-viewer) with a simple server-side proxy for Google Drive files
+- Client-side state via a custom hook `useCoursePage()` and dynamic imports for heavy pieces
+
+## 🛠️ Architecture & Design
+
+Design goals:
+
+- Composability: Features are grouped under `src/features/*`. Each feature owns its components, hooks, and types.
+- Performance: Large viewers (PDF, exam UI) are lazy-loaded using Next.js dynamic imports.
+
+Quick file tour
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+
+└── src
+    ├── app
+    │   ├── layout.tsx              # global layout, fonts, pdf worker
+    │   ├── page.tsx                # route entry (mounts CoursePage)
+    │   ├── not-found.tsx
+    │   ├── global-error.tsx
+    │   └── api/proxy-pdf/route.ts  # server-side PDF proxy
+    ├── components
+    │   ├── shared
+    │   └── ui
+    │       ├── button.tsx          # primary UI primitive
+    │       └── modal.tsx           # modal primitive used across features
+    ├── features
+    │   └── course
+    │       ├── components/CoursePage.tsx           # main composition
+    │       ├── hooks/useCoursePage.ts              # central page state & interactions
+    │       ├── features
+    │       │   ├── video-player
+    │       │   ├── sidebar
+    │       │   └── ...other feature modules (comments, ask-question, etc.)
+    │       ├── exams
+    │       └── pdf-viewer
+    ├── lib
+    │   └── utils.ts               # utility helpers
+    └── features/course/utils/mockCourseData.ts     # demo data
+
+Recommended quick read order:
+1. src/features/course/components/CoursePage.tsx
+2. src/features/course/hooks/useCoursePage.ts
+3. src/features/course/features/video-player/components/VideoPlayer.tsx
+4. src/app/layout.tsx
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Core concepts:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- App layer (`src/app`) wires routes and global layout (fonts, PDF worker tag).
+- Feature modules (`src/features/*`) are independent: e.g., `course`, `pdf-viewer`, `exam`.
+- Shared UI (`src/components/ui/*`) contains atomic components (Button, Modal, Slider).
+- Small server API (`src/app/api/proxy-pdf/route.ts`) safely proxies Google Drive PDFs, returning `application/pdf` to the client.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✨ Key Features
 
-## Learn More
+- ✅ Responsive video player with a modern control bar and accessible buttons
+- ✅ Mobile-first Picture-in-Picture (auto-activated on scroll)
+- ✅ Dynamic PDF viewing with a robust viewer (react-pdf-viewer)
+- ✅ Exam workflow (questions, timed sessions, scoring)
+- ✅ Comments and leaderboard for social proof and user engagement
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Developer Setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Local dev commands:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm install
+pnpm dev      # start dev server
 
-## Deploy on Vercel
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Open
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+http://localhost:3000
+```
+
+Configuration notes:
+
+- `src/app/layout.tsx` inserts a CDN `pdf.worker.min.js` that matches the `pdfjs-dist` version (
+  keep these in sync if you upgrade `pdfjs-dist`).
+- No environment variables are required for the demo.
+
+## 🔍 Code Walkthrough (where to look)
+
+- Entry: `src/app/page.tsx` — mounts CoursePage
+- Composition: `src/features/course/components/CoursePage.tsx` — layout and dynamic imports
+- Player: `src/features/course/features/video-player/components/VideoPlayer.tsx` & hooks
+- UI primitives: `src/components/ui/*` — Button, Modal, Slider, Textarea
+- Local hook: `src/features/course/hooks/useCoursePage.ts` — central UI state for the page
+- API: `src/app/api/proxy-pdf/route.ts` — proxy endpoint for PDFs
+- Mocks: `src/features/course/utils/mockCourseData.ts` — demo dataset
+
+## 📋 Code Review Guide
+
+Primary signals to check:
+
+- Code structure & modularity: look for feature folders and small reusable UI primitives
+
+Suggested inspection checklist:
+
+1. Open `CoursePage.tsx` and follow how components are dynamically imported and wired.
+2. Review `useCoursePage.ts` for client logic.
+
+## 📦 Libraries
+
+Next.js, React 19, TypeScript, Tailwind CSS, Shadcn UI, react-pdf-viewer, lucide-react
+
+## 📬 Contact
+
+📧 Email: [mostafa.mohamed.se@gmail.com](mostafa.mohamed.se@gmail.com)  
+🔗 LinkedIn: [LinkedIn](https://linkedin.com/in/mostafa22/)
