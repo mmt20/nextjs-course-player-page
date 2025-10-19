@@ -1,4 +1,5 @@
 "use client";
+
 import BreadcrumbHeader from "@/components/shared/Header/BreadcrumbHeader";
 import { AskQuestionModal } from "@/features/course/features/ask-question";
 import { CourseComments, CourseMaterials, VideoPlayer, VideoPlayerActions } from "@/features/course/features";
@@ -10,11 +11,12 @@ import { PdfViewerModal } from "@/features/pdf-viewer";
 import { mockCourseData } from "@/features/course/utils/mockCourseData";
 import { useCoursePage } from "@/features/course/hooks/useCoursePage";
 
-interface CourseDesktopLayoutProps {
+interface CourseLayoutProps {
   data: ReturnType<typeof useCoursePage>;
+  isMobile: boolean;
 }
 
-export function CourseDesktopLayout({ data }: CourseDesktopLayoutProps) {
+export function CourseLayout({ data, isMobile }: CourseLayoutProps) {
   return (
     <div className="bg-white text-gray-800 min-h-screen font-sans px-6 lg:px-12">
       <BreadcrumbHeader
@@ -22,10 +24,10 @@ export function CourseDesktopLayout({ data }: CourseDesktopLayoutProps) {
         title="Starting SEO as Your Home"
       />
 
-      <main className="lg:grid lg:grid-cols-[1fr_380px] gap-6">
+      <main className={isMobile ? "flex flex-col gap-6" : "lg:grid lg:grid-cols-[1fr_380px] gap-6"}>
         {/* Video Section */}
-        <div ref={data.videoPlayerRef} className="lg:col-start-1">
-          <div className="aspect-video">
+        <div ref={data.videoPlayerRef} className={isMobile ? (data.isWideMode ? "w-full" : "") : "lg:col-start-1"}>
+          <div className={isMobile ? (data.isWideMode ? "w-full h-[60vh]" : "aspect-video") : "aspect-video"}>
             <VideoPlayer
               videoUrl={mockCourseData.videoUrl}
               externalVideoRef={data.videoRef}
@@ -40,16 +42,16 @@ export function CourseDesktopLayout({ data }: CourseDesktopLayoutProps) {
           />
         </div>
 
-        {/* Sidebar - Sticky on Desktop */}
+        {/* Sidebar - Sticky on Desktop, inline on Mobile */}
         <div
           ref={data.curriculumRef}
-          className="lg:row-start-1 lg:row-span-4 lg:col-start-2 lg:sticky lg:top-6 lg:h-fit"
+          className={isMobile ? undefined : "lg:row-start-1 lg:row-span-4 lg:col-start-2 lg:sticky lg:top-6 lg:h-fit"}
         >
           <Sidebar weeks={mockCourseData.weeks} onLessonClick={data.handleLessonClick} />
         </div>
 
         {/* Course Materials */}
-        <div className="lg:col-start-1">
+        <div className={isMobile ? undefined : "lg:col-start-1"}>
           <h2 className="text-2xl font-bold mb-6">Course Materials</h2>
           <CourseMaterials
             duration={mockCourseData.duration}
@@ -64,7 +66,7 @@ export function CourseDesktopLayout({ data }: CourseDesktopLayoutProps) {
         </div>
 
         {/* Comments Section */}
-        <div ref={data.commentsRef} className="lg:col-start-1">
+        <div ref={data.commentsRef} className={isMobile ? undefined : "lg:col-start-1"}>
           <h2 className="text-2xl font-bold mb-6">Comments</h2>
           <div className="h-96 py-4">
             <CourseComments comments={mockCourseData.comments} />
@@ -91,3 +93,5 @@ export function CourseDesktopLayout({ data }: CourseDesktopLayoutProps) {
     </div>
   );
 }
+
+export default CourseLayout;

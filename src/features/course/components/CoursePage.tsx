@@ -1,7 +1,6 @@
 "use client";
 import { useCoursePage } from "@/features/course/hooks/useCoursePage";
-import { CourseMobileLayout } from "@/features/course/components/CourseMobileLayout";
-import { CourseDesktopLayout } from "@/features/course/components/CourseDesktopLayout";
+import CourseLayout from "@/features/course/components/CourseLayout";
 import { useEffect, useState } from "react";
 
 export default function CoursePage() {
@@ -24,5 +23,5 @@ export default function CoursePage() {
 
   if (!mounted) return null;
 
-  return isMobile ? <CourseMobileLayout data={data} /> : <CourseDesktopLayout data={data} />;
+  return <CourseLayout data={data} isMobile={isMobile} />;
 }
