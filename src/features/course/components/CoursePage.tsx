@@ -101,7 +101,7 @@ export default function CoursePage() {
       {/* Modals */}
       <ExamModal exam={mockExam} isOpen={data.examOpen} onClose={() => data.setExamOpen(false)} />
       <PdfViewerModal
-        pdfUrl="https://drive.google.com/file/d/1IjquLv6XGW0IbWLq2NrgpIssnS3ugdr0"
+        pdfUrl="https://drive.google.com/file/d/1oByzk_BQe6RVdOqGrZnFiebnu7qA65Rk/view?usp"
         isOpen={data.pdfOpen}
         onClose={() => data.setPdfOpen(false)}
         title={data.selectedLesson?.title || "PDF Document"}
